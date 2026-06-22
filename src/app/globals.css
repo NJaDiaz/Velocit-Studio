@@ -1,0 +1,115 @@
+@import "tailwindcss";
+
+/*
+ * ------------------------------------------------------------------
+ * VELOCIT STUDIO — Design tokens
+ * Paleta extraída directamente del isotipo de la marca: navy/azul
+ * royal (tipografía del logo), cyan y magenta (el remolino del
+ * isotipo). Ver README.md para la guía de marca completa.
+ * ------------------------------------------------------------------
+ */
+@theme inline {
+  --color-ink: #0a1428;
+  --color-ink-soft: #101d36;
+  --color-ink-line: #1f2c47;
+
+  --color-paper: #f5f6f8;
+  --color-paper-dim: #ebedf1;
+  --color-paper-line: #dde1e8;
+
+  /* Azul "royal" — color principal, tomado de la tipografía del logo */
+  --color-royal-50: #eaf1fc;
+  --color-royal-100: #d3e3f8;
+  --color-royal-500: #1a59b3;
+  --color-royal-600: #0a4595;
+  --color-royal-700: #073872;
+
+  /* Cyan — uno de los dos colores del remolino del isotipo */
+  --color-cyan-100: #cdf9fb;
+  --color-cyan-400: #1fd8e3;
+  --color-cyan-500: #06c2cf;
+
+  /* Magenta — el otro color del remolino del isotipo */
+  --color-magenta-100: #fbd9f6;
+  --color-magenta-400: #ea2fdc;
+  --color-magenta-500: #d111c4;
+
+  --color-mist-200: #d7dbe5;
+  --color-mist-300: #c1c7d6;
+  --color-mist-500: #717b94;
+  --color-mist-700: #475066;
+
+  --font-display: "Space Grotesk", sans-serif;
+  --font-sans: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  --animate-marquee: marquee 32s linear infinite;
+  --animate-streak: streak 2.6s ease-in-out infinite;
+  --animate-blink: blink 1s steps(1) infinite;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes streak {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: var(--color-magenta-400);
+  color: white;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-royal-600);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Línea de "velocidad": gradiente animado que reproduce los colores
+   exactos del remolino del isotipo (cyan -> royal -> magenta). Se usa
+   como separador entre secciones en lugar de un simple hairline, y es
+   la firma visual que se repite en toda la página. */
+.velocity-line {
+  height: 2px;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-cyan-400) 20%,
+    var(--color-royal-500) 50%,
+    var(--color-magenta-400) 80%,
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: var(--animate-streak);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
