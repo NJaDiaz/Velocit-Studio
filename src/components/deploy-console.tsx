@@ -38,6 +38,7 @@ function usePrefersReducedMotion() {
 export function DeployConsole() {
   const reduced = usePrefersReducedMotion();
   const [visible, setVisible] = useState(0);
+
   const linesToShow = reduced ? SCRIPT.length : visible;
 
   useEffect(() => {
@@ -49,6 +50,7 @@ export function DeployConsole() {
     const tick = () => {
       i += 1;
       setVisible(i);
+
       if (i < SCRIPT.length) {
         timeout = setTimeout(tick, i === 1 ? 500 : 650);
       } else {
@@ -60,6 +62,7 @@ export function DeployConsole() {
     };
 
     timeout = setTimeout(tick, 500);
+
     return () => clearTimeout(timeout);
   }, [reduced]);
 
@@ -77,22 +80,41 @@ export function DeployConsole() {
         </span>
       </div>
 
-      <div className="flex min-h-[200px] flex-col gap-2 px-5 py-5 font-mono text-[13px] leading-relaxed">
-        {SCRIPT.slice(0, linesToShow).map((line, idx) => (
-          <p
-            key={idx}
-            className={
-              line.tone === "head"
-                ? "text-paper"
-                : line.tone === "ok"
-                  ? "text-cyan-400"
-                  : "text-mist-500"
-            }
-          >
-            {line.text}
-          </p>
-        ))}
-        <span className="inline-block h-4 w-2 bg-magenta-400 animate-blink" />
+      <div className="h-[220px] sm:h-[230px] px-5 py-5 font-mono text-[12px] sm:text-[13px] leading-relaxed overflow-hidden">
+        <div className="flex flex-col gap-2">
+          {SCRIPT.map((line, idx) => {
+            const isVisible = idx < linesToShow;
+
+            return (
+              <p
+                key={idx}
+                className={`
+                  whitespace-nowrap
+                  overflow-hidden
+                  text-ellipsis
+                  transition-opacity
+                  duration-300
+                  ${
+                    isVisible
+                      ? "opacity-100"
+                      : "opacity-0"
+                  }
+                  ${
+                    line.tone === "head"
+                      ? "text-paper"
+                      : line.tone === "ok"
+                        ? "text-cyan-400"
+                        : "text-mist-500"
+                  }
+                `}
+              >
+                {line.text}
+              </p>
+            );
+          })}
+
+          <span className="inline-block h-4 w-2 bg-magenta-400 animate-blink" />
+        </div>
       </div>
 
       <PerformanceGauge value={99} />
@@ -110,8 +132,11 @@ function PerformanceGauge({ value }: { value: number }) {
         <p className="font-mono text-[11px] uppercase tracking-wide text-mist-500">
           Lighthouse score
         </p>
-        <p className="font-display text-2xl font-semibold text-paper">{pct}</p>
+        <p className="font-display text-2xl font-semibold text-paper">
+          {pct}
+        </p>
       </div>
+
       <svg viewBox="0 0 100 56" className="h-12 w-24" role="presentation">
         <path
           d="M6 50 A44 44 0 0 1 94 50"
@@ -120,6 +145,7 @@ function PerformanceGauge({ value }: { value: number }) {
           strokeWidth="8"
           strokeLinecap="round"
         />
+
         <path
           d="M6 50 A44 44 0 0 1 94 50"
           fill="none"
